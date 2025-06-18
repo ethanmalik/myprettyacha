@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Will You Be Mine, Acha? ❤️</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');
+  
+  :root {
+    --paper: #f8e1f2;
+    --ink: #2a2929;
+    --rose: #ec66c2;
+    --accent: #f58ad6;
+    --purple: #e81ba7;
+    --light-purple: #eeb2da;
+  }
+
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, var(--light-purple), var(--accent));
+    font-family: 'Courier New', monospace;
+    color: var(--ink);
+    text-align: center;
+    overflow-x: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .petals {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .petal {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: url('https://i.ibb.co/9rCCKcx/petal.png') no-repeat center/contain;
+    animation: fall linear infinite;
+    filter: drop-shadow(0 0 5px rgba(148, 46, 176, 0.3));
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-10%) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .page {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .page.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Page 1: Envelope */
+  #page1 h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    color: var(--purple);
+    user-select: none;
+    text-shadow: 2px 2px 5px rgba(213,0,109,0.4);
+  }
+  
+  #envelope {
+    width: 220px;
+    height: 160px;
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+    border-radius: 10px 10px 5px 5px;
+    border: 3px solid var(--purple);
+    box-shadow: 0 8px 15px rgba(213,0,109,0.6);
+    cursor: pointer;
+    position: relative;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+  }
+  
+  #envelope:hover {
+    transform: scale(1.05) rotate(-2deg);
+    animation: none;
+  }
+  
+  #flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 70px;
+    background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+    border-radius: 10px 10px 0 0;
+    border-bottom: 3px solid #a10063;
+    box-shadow: 0 6px 10px rgba(213,0,109,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: top;
+    transition: transform 0.5s ease;
+  }
+  
+  #flap svg {
+    width: 30px;
+    height: 30px;
+    fill: #fff0f7;
+    filter: drop-shadow(0 0 3px #ff69b4);
+    transition: fill 0.3s ease;
+  }
+  
+  #envelope:hover #flap svg {
+    fill: #ffe6f0;
+    animation: heartbeat 1s infinite;
+  }
+
+  @keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  /* Page 2: Love Letter */
+  .letter-container {
+    background: var(--paper);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 600px;
+    width: fit-content; /* Added this to make container fit content */
+    margin: 0 auto; /* Center the container */
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1),
+                0 0 0 10px var(--light-purple),
+                0 0 0 12px white;
+    position: relative;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    border: 2px solid var(--rose);
+    white-space: pre-wrap;
+    min-height: 300px;
+    max-height: 80vh; /* Limit maximum height */
+    overflow-y: auto; /* Add scroll if content is too long */
+  }
+  
+  .letter-container.visible {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  .letter-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-align: left;
+    color: var(--ink);
+  }
+  
+  #typewriterText {
+    display: inline;
+  }
+  
+  .typing-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.2rem;
+    background-color: var(--purple);
+    animation: blink 0.7s infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  
+  .signature {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 2rem;
+    text-align: right;
+    margin-top: 30px;
+    color: var(--purple);
+    opacity: 0;
+    background: url('https://i.ibb.co/6J0bZQ7/underline.png') no-repeat bottom right;
+    background-size: 150px 10px;
+    padding-bottom: 15px;
+  }
+  
+  .next-btn {
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    border: none;
+    background: var(--purple);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(213,0,109,0.5);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  .next-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .next-btn:hover {
+    background: #ff69b4;
+    box-shadow: 0 6px 25px rgba(255,105,180,0.7);
+    transform: translateY(-3px);
+  }
+
+  /* Page 3: Proposal */
+  #page3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #proposal-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3rem;
+    color: var(--purple);
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 5px rgba(213,0,109,0.4);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  
+  #proposal-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .response-btn {
+    padding: 15px 40px;
+    font-size: 1.3rem;
+    border-radius: 30px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    margin: 10px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  .response-btn.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  #yes-btn {
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+  }
+  
+  #no-btn {
+    background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+  }
+  
+  .response-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  }
+  
+
+  /* Page 4: Response */
+  #page4 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .response-box {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(213,0,109,0.3);
+    text-align: center;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  
+  .response-box.visible {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  .response-title {
+    font-size: 2rem;
+    color: var(--purple);
+    margin-bottom: 20px;
+    font-family: 'Dancing Script', cursive;
+  }
+  
+  .spotify-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: #1DB954;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .spotify-link:hover {
+    background: #1ed760;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+  }
+
+  /* Music player */
+  .music-control {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+
+  .music-control:hover {
+    transform: scale(1.1);
+  }
+
+  .music-control i {
+    font-size: 24px;
+    color: var(--purple);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #page1 h1, #proposal-text {
+      font-size: 2.5rem;
+    }
+    
+    .letter-container, .response-box {
+      width: 90%;
+      padding: 20px;
+    }
+    
+    .letter-content {
+      font-size: 1rem;
+    }
+    
+    .response-btn {
+      padding: 12px 30px;
+      font-size: 1.1rem;
+    }
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Petals background -->
+  <div class="petals" id="petals"></div>
+  
+  <!-- Music Control -->
+ 
+    <audio id="bgMusic" loop>
+       <source src="https://audio.jukehost.co.uk/aDZ3XR1KA0o0Z6MJh0KjbelWkH8nbmZS" type="audio/mpeg">
+    Your browser does not support the audio element.
+   </audio>
+    <audio id="typeSound" src="https://audio.jukehost.co.uk/z7gZZR8R5uuOqZEnjQ0eVbouNYpZK1Kd"></audio>
+  
+     <div class="music-control" id="musicControl">
+    <i class="fas fa-music"></i>
+      </div>
+
+  <!-- Page 1: Envelope -->
+  <section id="page1" class="page active">
+    <h1>My feelings for you, Acha</h1>
+    <div id="envelope" role="button" tabindex="0">
+      <div id="flap">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 
+          4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 
+          14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 
+          6.86-8.55 11.54L12 21.35z" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 2: Love Letter -->
+  <section id="page2" class="page">
+    <div class="letter-container">
+      <div class="letter-content">
+        <span id="typewriterText"></span>
+        <span class="typing-cursor"></span>
+        <div class="signature" id="signature">Ethan Malik</div>
+      </div>
+    </div>
+    <button class="next-btn" id="next-btn">Next ❤️</button>
+  </section>
+
+  <!-- Page 3: Proposal -->
+  <section id="page3" class="page">
+    <h1 id="proposal-text">So, Will You Be Mine?</h1>
+    <div class="btn-container">
+      <button id="yes-btn" class="response-btn">Yes, I Wanna Be Yours!</button>
+      <button id="no-btn" class="response-btn">No, You Are Mine!</button>
+    </div>
+  </section>
+
+  <!-- Page 4: Response -->
+  <section id="page4" class="page">
+    <div class="response-box">
+      <h2 class="response-title" id="response-title">You've Made Me The Happiest Man!</h2>
+      <p id="response-text">Let's spend time together and make many beautiful memories with me, Acha:</p>
+      <a href="https://open.spotify.com/playlist/3BmPfHDWjE5XKCURQMmrHB?si=9O9zzrz9QaiZ5CECmC4eGA" class="spotify-link" target="_blank">
+        <i class="fab fa-spotify"></i> Our Love Playlist
+      </a>
+    </div>
+  </section>
+
+<script>
+  // Create petals background
+  function createPetals() {
+    const petalsContainer = document.getElementById("petals");
+    for (let i = 0; i < 25; i++) {
+      const petal = document.createElement("div");
+      petal.classList.add("petal");
+      petal.style.left = Math.random() * window.innerWidth + "px";
+      petal.style.animationDuration = (Math.random() * 3 + 3) + "s";
+      petal.style.animationDelay = Math.random() * 5 + "s";
+      petal.style.opacity = Math.random() * 0.7 + 0.3;
+      petalsContainer.appendChild(petal);
+    }
+  }
+
+  // ====== MUSIC CONTROL ======
+  const bgMusic = document.getElementById('bgMusic');
+  const typeSound = document.getElementById('typeSound');
+  const musicControl = document.getElementById('musicControl');
+  let musicInitialized = false;
+  let isMusicPlaying = false;
+
+  function initMusic() {
+    if (!musicInitialized) {
+      bgMusic.volume = 0.3;
+      typeSound.volume = 0.2;
+      musicInitialized = true;
+    }
+  }
+
+  function toggleMusic() {
+    if (isMusicPlaying) {
+      bgMusic.pause();
+      musicControl.innerHTML = '<i class="fas fa-music"></i>';
+    } else {
+      bgMusic.play()
+        .then(() => {
+          musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+        })
+        .catch(error => {
+          console.log("Playback failed:", error);
+          musicControl.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+        });
+    }
+    isMusicPlaying = !isMusicPlaying;
+  }
+
+  // Initialize music on first interaction
+  function handleFirstInteraction() {
+    initMusic();
+    bgMusic.play()
+      .then(() => {
+        isMusicPlaying = true;
+        musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+      })
+      .catch(error => {
+        console.log("Autoplay prevented. User needs to click play button.");
+      });
+    
+    // Remove these listeners after first interaction
+    document.removeEventListener('click', handleFirstInteraction);
+    document.removeEventListener('touchstart', handleFirstInteraction);
+  }
+
+  // Set up music control
+  musicControl.addEventListener('click', toggleMusic);
+  document.addEventListener('click', handleFirstInteraction);
+  document.addEventListener('touchstart', handleFirstInteraction);
+
+  // ====== TYPEWRITER EFFECT ======
+  const letterText = `hey acha,
+
+You know, sometimes I just sit and thinking how happy I am if I can have you, make you mine, and only mine.
+
+You're so full of life. bubbly, chaotic, flirty as hell, and effortlessly gorgeous. It's insane how often i catch myself thinking like, "shit, she's so fucking pretty, I wanna kiss her." like… genuinely. It just hits out of nowhere.
+
+You make things fun. Even the smallest stuff like telling me about something random it makes my day. You've got this energy that pulls people in, and i swear it's addictive.
+
+I don't even know when it happened, but you just kinda became the highlight of everything. And now it's hard to imagine a day without hearing from you.
+
+So i like you. No, more than just "like" I love you, Acha, a lot.`;
+
+  async function typeWriter() {
+    const target = document.getElementById("typewriterText");
+    const cursor = document.querySelector(".typing-cursor");
+    const signature = document.getElementById("signature");
+    const nextBtn = document.getElementById("next-btn");
+    
+    target.innerHTML = '';
+    let i = 0;
+    
+    while (i < letterText.length) {
+      // Add character
+      target.innerHTML += letterText.charAt(i);
+      
+      // Play typing sound for non-space characters
+      if (letterText.charAt(i) !== ' ' && letterText.charAt(i) !== '\n') {
+        typeSound.currentTime = 0;
+        typeSound.play();
+      }
+      
+      // Pause at punctuation
+      if (/[.,!?]/.test(letterText.charAt(i))) {
+        await new Promise(resolve => setTimeout(resolve, 150));
+      }
+      
+      // Random typing speed variation
+      const speed = 30 + Math.random() * 20;
+      await new Promise(resolve => setTimeout(resolve, speed));
+      
+      i++;
+    }
+    
+    // Remove cursor and show signature
+    cursor.style.display = 'none';
+    signature.style.opacity = 1;
+    await new Promise(resolve => setTimeout(resolve, 500));
+    nextBtn.classList.add('visible');
+  }
+
+  // ====== PAGE TRANSITIONS ======
+  const pages = document.querySelectorAll('.page');
+  const envelope = document.getElementById('envelope');
+  const nextBtn = document.getElementById('next-btn');
+  const letterContainer = document.querySelector('.letter-container');
+  const proposalText = document.getElementById('proposal-text');
+  const yesBtn = document.getElementById('yes-btn');
+  const noBtn = document.getElementById('no-btn');
+  const responseBox = document.querySelector('.response-box');
+  const responseTitle = document.getElementById('response-title');
+  const responseText = document.getElementById('response-text');
+
+  function goToPage(pageNumber) {
+    pages.forEach((page, index) => {
+      page.classList.remove('active');
+      if(index === pageNumber - 1) {
+        page.classList.add('active');
+        
+        // Trigger animations for specific pages
+        if(pageNumber === 2) {
+          setTimeout(() => {
+            letterContainer.classList.add('visible');
+            typeWriter();
+          }, 300);
+        } else if(pageNumber === 3) {
+          setTimeout(() => {
+            proposalText.classList.add('visible');
+            setTimeout(() => {
+              yesBtn.classList.add('visible');
+              noBtn.classList.add('visible');
+            }, 500);
+          }, 300);
+        } else if(pageNumber === 4) {
+          setTimeout(() => {
+            responseBox.classList.add('visible');
+          }, 300);
+        }
+      }
+    });
+  }
+
+  // Envelope click opens the letter
+  envelope.addEventListener('click', () => {
+    document.getElementById('flap').style.transform = 'rotateX(180deg)';
+    setTimeout(() => {
+      goToPage(2);
+    }, 800);
+  });
+
+  // Next button shows the proposal
+  nextBtn.addEventListener('click', () => {
+    goToPage(3);
+  });
+
+  // Response buttons
+  yesBtn.addEventListener('click', () => {
+    responseTitle.textContent = "You've Made Me The Happiest Man!";
+    responseText.textContent = "Let's celebrate with our song. Here's a playlist I made just for you:";
+    goToPage(4);
+  });
+
+  noBtn.addEventListener('click', () => {
+    responseTitle.textContent = "I Like Your Confidence!";
+    responseText.textContent = "Since you've claimed me, here's a playlist to celebrate our love:";
+    goToPage(4);
+  });
+
+  // Initialize
+  createPetals();
+</script>
+</body>
+</html>
